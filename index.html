@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Sistemas para Internet II - 2024</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        /* Centralizando o formulário */
+        body {
+            background-color: #000000; /* Cor de fundo */
+        }
+
+        .custom-bg {
+            background-color: #0a939a; /* Cor de fundo do formulário */
+            border-radius: 10px; /* Borda arredondada */
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="custom-bg">
+                    <form id="registrationForm">
+                        <div class="form-group">
+                            <label for="fullName">Nome Completo</label>
+                            <input type="text" class="form-control" id="fullName" placeholder="Nome Completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf">CPF</label>
+                            <input type="text" class="form-control" id="cpf" placeholder="CPF" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefone</label>
+                            <input type="text" class="form-control" id="phone" placeholder="Telefone">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label for="inputCEP">CEP</label>
+                                <input type="text" class="form-control" id="inputCEP" placeholder="CEP" required>
+                            </div>
+                            <div class="form-group col-md-10">
+                                <label for="inputAddress">Endereço</label>
+                                <input type="text" class="form-control" id="inputAddress" placeholder="Rua dos Bobos, nº 0" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress2">Número da Casa</label>
+                            <input type="text" class="form-control" id="inputAddress2" placeholder="Número da Casa" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputCity">Cidade</label>
+                            <input type="text" class="form-control" id="inputCity" placeholder="Cidade" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEstado">Estado</label>
+                            <input type="text" class="form-control" id="inputEstado" placeholder="Estado" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="university">Universidade</label>
+                            <input type="text" class="form-control" id="university" placeholder="Universidade" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="course">Curso</label>
+                            <select id="course" class="form-control" required>
+                                <option value="" selected>Escolher...</option>
+                                <option value="sistemas">Sistemas de Informação</option>
+                                <option value="engenharia">Engenharia de Automação</option>
+                                <option value="computacao">Computação</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="birthdate">Data de Nascimento</label>
+                            <input type="date" class="form-control" id="birthdate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Gênero</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" id="male" value="male" required>
+                                <label class="form-check-label" for="male">
+                                    Masculino
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" id="female" value="female" required>
+                                <label class="form-check-label" for="female">
+                                    Feminino
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            var cpf = document.getElementById('cpf').value;
+            var cep = document.getElementById('inputCEP').value;
+
+            // Validando CPF (11 dígitos)
+            if (!/^\d{3}[\s.-]?\d{3}[\s.-]?\d{3}[\s.-]?\d{2}$/.test(cpf)) {
+                alert('CPF inválido!');
+                event.preventDefault();
+                return;
+            }
+
+            // Validando CEP (formato simples)
+            if (!/^\d{5}[\s.-]?\d{3}$/.test(cep)) {
+                alert('CEP inválido!');
+                event.preventDefault();
+                return;
+            }
+
+            // Alerta ao enviar
+            alert('Enviado para o professor Prisco!');
+        });
+
+        // Preencher endereço, cidade e estado com base no CEP
+        document.getElementById('inputCEP').addEventListener('blur', function() {
+            var cep = this.value;
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('inputAddress').value = data.logradouro;
+                    document.getElementById('inputCity').value = data.localidade;
+                    document.getElementById('inputEstado').value = data.uf;
+                })
+                .catch(error => console.error('Erro ao obter dados do CEP:', error));
+        });
+    </script>
+</body>
+</html>
